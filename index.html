@@ -1,0 +1,23 @@
+<html>
+
+<body>
+    <h2>Interactive Lists</h2>
+    <ul id="lists">
+        <li>Interactive Item 1</li>
+        <li>Interactive Item 2</li>
+        <li>Interactive Item 3</li>
+    </ul>
+    <script>
+        let ul = document.querySelector("#lists");
+
+        ul.addEventListener("click", (e) => {
+            if (e.target.tagName === "LI") {
+                e.target.style.backgroundColor = `#${Math.floor(Math.random()*16777215).toString(16)}`;
+            }
+        });
+    </script>
+
+<script differ src="script.js"></script>
+</body>
+
+</html>

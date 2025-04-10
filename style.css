@@ -1,0 +1,13 @@
+.hve{
+    background-color: blueviolet;
+    padding: 20px;
+    display: block;
+    width: 50vw;
+    margin: 0 auto;
+    filter: blur(1.7px);
+
+    font-size: 30px;
+    color: whitesmoke;
+
+    border-radius: 90px;
+}
