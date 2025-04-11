@@ -2,7 +2,7 @@
 
 ### ⏱ What is Time Complexity?
 - ###### Time complexity tells us how fast an algorithm runs depending on the size of the input.
-- ###### Think of it like: “How many steps will my code take as the input gets bigger?”
+- ###### Think of it like: “How many steps will my code take to execute as the input gets bigger?”
 
 - ###### Time complexity tells us how the runtime of an algorithm increases as the size of the input (n) increases.
 - ###### It does not measure time in seconds, but how many operations or steps the algorithm takes.
@@ -21,7 +21,7 @@
 ---
 ## 💡 Golden Rule
 Time Complexity ≈ Number of times your code runs a step
-- Loops = bad for time
+- Loops = bad for time complexicity
 
 - Nested loops = very bad 😅
 -------
@@ -252,4 +252,14 @@ function combo(arr) {
 
 
 
-# Written and researched by ABHISHEK MEHATA(The AI)
+---
+---
+| Big-O      | Name         | Growth                |
+| ---------- | ------------ | --------------------- |
+| O(1)       | Constant     | 🚀 Fastest             |
+| O(log n)   | Logarithmic  | 🔍 Binary search       |
+| O(n)       | Linear       | 📃 Loop over array     |
+| O(n log n) | Linearithmic | 🧠 Merge sort          |
+| O(n²)      | Quadratic    | 🐢 Nested loops        |
+| O(2ⁿ)      | Exponential  | 💣 Recursive Fibonacci |
+| O(n!)      | Factorial    | 😱 All permutations    |
