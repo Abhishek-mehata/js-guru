@@ -1,4 +1,4 @@
-<html>
+<!-- <html>
 
 <body>
     <h2>Interactive Lists</h2>
@@ -8,16 +8,63 @@
         <li>Interactive Item 3</li>
     </ul>
     <script>
+        let myWindow = window.open("https://google.com", "_blank", "width=500,height=500");
+        let i = 0;
+        const interval = setInterval(() => {
+            console.log("hi");
+            i++;
+            if (i === 3) {
+                myWindow.close();
+                clearInterval(interval); // Good practice to stop the interval
+            }
+        }, 3000);
+
         let ul = document.querySelector("#lists");
 
         ul.addEventListener("click", (e) => {
             if (e.target.tagName === "LI") {
-                e.target.style.backgroundColor = `#${Math.floor(Math.random()*16777215).toString(16)}`;
+                e.target.style.backgroundColor = `#${Math.floor(Math.random() * 16777215).toString(16)}`;
             }
         });
     </script>
 
-<script differ src="script.js"></script>
+    <script defer src="script.js"></script>
 </body>
 
+</html> -->
+<!-- <button onclick="openAndClose()">Open Google and auto-close</button> -->
+
+<!-- ```javascript -->
+<html>
+<head>
+    <style>
+        .highlight {
+            color: red;
+            font-weight: 700;
+        }
+        .bold {
+            font-weight: normal;
+
+        }
+    </style>
+</head>
+<body>
+    <div id="example" class="bold">This is a text element with the "bold" class.</div>
+
+    <button onclick="addClass()">Add 'highlight' Class</button>
+    <button onclick="removeClass()">Remove 'bold' Class</button>
+    <button onclick="toggleClass()">Toggle 'highlight' Class</button>
+    <script>
+        function addClass() {
+            document.getElementById("example").classList.add("highlight");
+        }
+        function removeClass() {
+            document.getElementById("example").classList.remove("bold");
+        }
+        function toggleClass() {
+            document.getElementById("example").classList.toggle("highlight");
+        }
+    </script>
+</body>
 </html>
+<!-- ``` -->

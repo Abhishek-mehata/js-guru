@@ -44,3 +44,12 @@
 
 // F(n)=F(n−1)+F(n−2)
 
+
+// Removing an Event Listener
+function sayHello() { 
+   console.log("Hello!");
+}
+
+let btn = document.getElementById("btn");
+btn.addEventListener("click", sayHello);
+btn.removeEventListener("click", sayHello);
