@@ -1,70 +1,124 @@
-<!-- <html>
+<!-- <canvas id="scratchCanvas" width="400" height="300" style="border:1px solid #000;"></canvas>
 
-<body>
-    <h2>Interactive Lists</h2>
-    <ul id="lists">
-        <li>Interactive Item 1</li>
-        <li>Interactive Item 2</li>
-        <li>Interactive Item 3</li>
-    </ul>
-    <script>
-        let myWindow = window.open("https://google.com", "_blank", "width=500,height=500");
-        let i = 0;
-        const interval = setInterval(() => {
-            console.log("hi");
-            i++;
-            if (i === 3) {
-                myWindow.close();
-                clearInterval(interval); // Good practice to stop the interval
-            }
-        }, 3000);
+<script>
+  const canvas = document.getElementById("scratchCanvas");
+  const ctx = canvas.getContext("2d");
 
-        let ul = document.querySelector("#lists");
+  // Create an off-screen canvas for the hidden text
+  const textCanvas = document.createElement("canvas");
+  textCanvas.width = canvas.width;
+  textCanvas.height = canvas.height;
+  const textCtx = textCanvas.getContext("2d");
 
-        ul.addEventListener("click", (e) => {
-            if (e.target.tagName === "LI") {
-                e.target.style.backgroundColor = `#${Math.floor(Math.random() * 16777215).toString(16)}`;
-            }
-        });
-    </script>
+  // Draw hidden text on offscreen canvas
+  textCtx.font = "30px Arial";
+  textCtx.fillStyle = "red";
+  textCtx.textAlign = "center";
+  textCtx.fillText("🎉 You Won!", canvas.width / 2, canvas.height / 2);
 
-    <script defer src="script.js"></script>
-</body>
+  // Cover main canvas with gray
+  ctx.fillStyle = "gray";
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-</html> -->
-<!-- <button onclick="openAndClose()">Open Google and auto-close</button> -->
+  let isDrawing = false;
 
-<!-- ```javascript -->
-<html>
-<head>
-    <style>
-        .highlight {
-            color: red;
-            font-weight: 700;
-        }
-        .bold {
-            font-weight: normal;
+  canvas.addEventListener("mousedown", () => (isDrawing = true));
+  canvas.addEventListener("mouseup", () => (isDrawing = false));
 
-        }
-    </style>
-</head>
-<body>
-    <div id="example" class="bold">This is a text element with the "bold" class.</div>
+  canvas.addEventListener("mousemove", (e) => {
+    if (!isDrawing) return;
 
-    <button onclick="addClass()">Add 'highlight' Class</button>
-    <button onclick="removeClass()">Remove 'bold' Class</button>
-    <button onclick="toggleClass()">Toggle 'highlight' Class</button>
-    <script>
-        function addClass() {
-            document.getElementById("example").classList.add("highlight");
-        }
-        function removeClass() {
-            document.getElementById("example").classList.remove("bold");
-        }
-        function toggleClass() {
-            document.getElementById("example").classList.toggle("highlight");
-        }
-    </script>
-</body>
-</html>
-<!-- ``` -->
+    const x = e.offsetX;
+    const y = e.offsetY;
+
+    // Erase gray layer where mouse moves
+    ctx.globalCompositeOperation = "destination-out";
+    ctx.beginPath();
+    ctx.arc(x, y, 15, 0, Math.PI * 2);
+    ctx.fill();
+
+    // Slowly increase opacity of the message based on cleared area
+    revealTextGradually();
+  });
+
+  // Gradually reveal the hidden text based on how much gray area is erased
+  function revealTextGradually() {
+    const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+    let transparentPixels = 0;
+
+    for (let i = 0; i < imageData.data.length; i += 4) {
+      if (imageData.data[i + 3] === 0) {
+        transparentPixels++;
+      }
+    }
+
+    const totalPixels = canvas.width * canvas.height;
+    const progress = transparentPixels / totalPixels; // 0 to 1
+
+    // Clear the text area and redraw it with dynamic opacity
+    ctx.globalCompositeOperation = "source-over";
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.fillStyle = "gray";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    // Restore scratched areas
+    ctx.globalCompositeOperation = "destination-out";
+    ctx.putImageData(imageData, 0, 0);
+
+    // Draw faded text based on scratching progress
+    ctx.globalAlpha = Math.min(progress * 2, 1); // fade in faster (x2)
+    ctx.globalCompositeOperation = "source-over";
+    ctx.drawImage(textCanvas, 0, 0);
+    ctx.globalAlpha = 1;
+  }
+</script> -->
+
+
+<style>
+	.card {
+		width: 300px;
+		height: 200px;
+		background: linear-gradient(45deg, #6a11cb, #2575fc); /* gradient background */
+		margin: 100px auto;
+		perspective: 1000px; /* depth for 3D effect */
+		border-radius: 20px;
+		transition: 0.3s; /* smooth reset on mouse leave */
+		transform-style: preserve-3d; /* allows 3D child elements if needed */
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		color: white;
+		font-size: 1.5rem;
+		box-shadow: inset 0 0 10px rgba(241, 8, 8, 0.5); /* glowing inner border */
+	}
+</style>
+
+<!-- The card that reacts to mouse movement -->
+<div class="card" id="card">Hover Me!</div>
+
+<script>
+	const card = document.getElementById("card");
+
+	card.addEventListener("mousemove", (e) => {
+		// Get card's position and dimensions
+		const { width, height, left, top } = card.getBoundingClientRect();
+
+		// Get mouse position relative to the card
+		const x = e.clientX - left;
+		const y = e.clientY - top;
+
+		// Calculate rotation:
+		// - rotateX tilts up/down based on Y position
+		// - rotateY tilts left/right based on X position
+		const rotateX = ((y / height) - 0.5) * 40; // -20 to +20 degrees
+		const rotateY = ((x / width) - 0.5) * -40; // -20 to +20 degrees
+
+		// Apply the 3D transform
+		card.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+	});
+
+	// Reset rotation when mouse leaves the card
+	card.addEventListener("mouseleave", () => {
+		card.style.transform = "rotateX(0) rotateY(0)";
+	});
+</script>
