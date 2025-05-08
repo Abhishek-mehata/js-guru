@@ -191,7 +191,7 @@ console.log(words);
 
 - #### Splitting by Any Digit
 
-```
+```javascript
 let str = "abc1def2ghi3jkl";
 let parts = str.split(/\d/); 
 console.log(parts);
