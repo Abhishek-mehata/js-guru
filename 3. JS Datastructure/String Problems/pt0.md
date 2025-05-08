@@ -100,7 +100,7 @@ console.log(text.substring(10, 4));  // Output: Script
 ```
 
 - #### When to Use Which?
-  -   Use slice() when you need negative indexes or when you don’t want automatic swapping.
+  - Use slice() when you need negative indexes or when you don’t want automatic swapping.
 
   - Use substring() if you want automatic correction when start > end.
 - -----
