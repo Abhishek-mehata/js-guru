@@ -1,0 +1,791 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TechVault - Premium Tech Accessories</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* Existing CSS from original code (summarized for brevity) */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        /* Header, Hero, Products, Features, Cart, Footer, and Animations CSS unchanged */
+        /* New styles for admin dashboard */
+        .admin-page {
+            background: white;
+            min-height: 100vh;
+            padding: 6rem 0 2rem;
+        }
+        .admin-section {
+            margin-bottom: 2rem;
+        }
+        .admin-section h2 {
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+            color: #333;
+        }
+        .admin-cart-list {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .admin-cart-item {
+            background: #f8f9fa;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            border-radius: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .admin-product-form {
+            max-width: 400px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+        .admin-product-form input {
+            padding: 0.8rem;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+        }
+        .admin-product-form button {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 0.8rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        .admin-product-form button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+        /* Updated login modal styles */
+        .login-content input {
+            width: 100%;
+            padding: 0.8rem;
+            margin-bottom: 1rem;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+        }
+        .login-btn {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 0.8rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            width: 100%;
+        }
+        .login-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+        /* Hamburger menu and responsive styles */
+        .hamburger {
+            display: none;
+            font-size: 1.5rem;
+            background: none;
+            border: none;
+            color: #333;
+            cursor: pointer;
+        }
+        @media (max-width: 768px) {
+            .hamburger {
+                display: block;
+            }
+            .nav-links {
+                display: none;
+                flex-direction: column;
+                position: absolute;
+                top: 60px;
+                left: 0;
+                right: 0;
+                background: rgba(255, 255, 255, 0.95);
+                padding: 1rem;
+                box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            }
+            .nav-links.active {
+                display: flex;
+            }
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+            .product-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <nav>
+                <div class="logo">TechVault</div>
+                <button class="hamburger" onclick="toggleMenu()">☰</button>
+                <ul class="nav-links" id="navLinks">
+                    <li><a href="#home">Home</a></li>
+                    <li><a href="#products">Products</a></li>
+                    <li><a href="#features">Features</a></li>
+                    <li><a href="#contact">Contact</a></li>
+                    <li><a href="#" onclick="showAdminPage()" class="admin-link hidden" id="adminLink">Admin Dashboard</a></li>
+                </ul>
+                <div class="cart-icon" onclick="toggleCart()" aria-label="Shopping Cart">
+                    🛒
+                    <span class="cart-count" id="cartCount">0</span>
+                </div>
+                <div class="user-menu" id="userMenu">
+                    <button class="login-btn" id="loginBtn" onclick="showLoginModal()" aria-label="Sign In">Sign In</button>
+                    <div class="user-info hidden" id="userInfo">
+                        <img src="" alt="User Avatar" class="user-avatar" id="userAvatar" onclick="toggleUserDropdown()">
+                        <div class="user-dropdown hidden" id="userDropdown">
+                            <div class="user-dropdown-item">
+                                <strong id="userName">User Name</strong><br>
+                                <small id="userEmail">user@email.com</small>
+                            </div>
+                            <a href="#" class="user-dropdown-item" onclick="showProfile()">Profile</a>
+                            <a href="#" class="user-dropdown-item" onclick="showOrders()">My Orders</a>
+                            <a href="#" class="user-dropdown-item" onclick="logout()">Sign Out</a>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="container">
+            <h1>Premium Tech Accessories</h1>
+            <p>Elevate your tech experience with our curated collection of high-quality accessories</p>
+            <a href="#products" class="cta-button">Shop Now</a>
+        </div>
+    </section>
+
+    <!-- Products Section -->
+    <section class="products" id="products">
+        <div class="container">
+            <h2 class="section-title">Featured Products</h2>
+            <div class="product-grid" id="productGrid">
+                <div class="product-card">
+                    <div class="product-image" aria-label="Premium Phone Case">📱</div>
+                    <div class="product-info">
+                        <h3 class="product-title">Premium Phone Case</h3>
+                        <div class="product-price">$29.99</div>
+                        <p class="product-description">Ultra-slim design with military-grade protection.</p>
+                        <button class="add-to-cart" onclick="addToCart('Premium Phone Case', 29.99)" aria-label="Add Premium Phone Case to Cart">Add to Cart</button>
+                    </div>
+                </div>
+                <!-- Other product cards (unchanged) -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section (unchanged) -->
+    <section class="features" id="features">
+        <div class="container">
+            <h2 class="section-title">Why Choose TechVault?</h2>
+            <div class="features-grid">
+                <!-- Feature cards (unchanged) -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Cart Page -->
+    <div class="cart-page hidden" id="cartPage">
+        <button class="back-to-home" onclick="showHomePage()" aria-label="Back to Shop">← Back to Shop</button>
+        <div class="cart-container">
+            <div class="cart-header">
+                <h1 class="section-title">Your Shopping Cart</h1>
+            </div>
+            <div id="cartItems"></div>
+            <div class="cart-summary" id="cartSummary">
+                <div class="cart-total" id="cartTotal">Total: $0.00</div>
+                <button class="checkout-btn" onclick="checkout()" aria-label="Proceed to Checkout">Proceed to Checkout</button>
+                <a href="#" class="continue-shopping" onclick="showHomePage()">Continue Shopping</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Admin Dashboard -->
+    <div class="admin-page hidden" id="adminPage">
+        <button class="back-to-home" onclick="showHomePage()" aria-label="Back to Shop">← Back to Shop</button>
+        <div class="cart-container">
+            <div class="admin-section">
+                <h2>Manage User Carts</h2>
+                <div class="admin-cart-list" id="adminCartList"></div>
+            </div>
+            <div class="admin-section">
+                <h2>Add New Product</h2>
+                <form class="admin-product-form" onsubmit="addProduct(event)">
+                    <input type="text" id="productName" placeholder="Product Name" required>
+                    <input type="number" id="productPrice" placeholder="Price" step="0.01" required>
+                    <input type="text" id="productDescription" placeholder="Description" required>
+                    <input type="text" id="productIcon" placeholder="Emoji Icon (e.g., 📱)" required>
+                    <button type="submit">Add Product</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Login Modal -->
+    <div class="login-modal hidden" id="loginModal">
+        <div class="login-content">
+            <button class="close-modal" onclick="hideLoginModal()" aria-label="Close Login Modal">×</button>
+            <h2 class="login-title">Welcome to TechVault</h2>
+            <p class="login-subtitle">Sign in to continue</p>
+            <form onsubmit="login(event)">
+                <input type="text" id="userId" placeholder="User ID" required>
+                <input type="password" id="userPassword" placeholder="Password" required>
+                <button type="submit" class="login-btn" aria-label="Sign In">Sign In</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Footer (unchanged) -->
+    <footer id="contact">
+        <div class="container">
+            <div class="footer-content">
+                <!-- Footer sections (unchanged) -->
+            </div>
+            <div class="footer-bottom">
+                <p>© 2025 TechVault. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // User database (for demo purposes; use server-side in production)
+        const users = [
+            { id: 'admin', password: 'admin123', role: 'admin', name: 'Admin', email: 'admin@techvault.com', picture: 'https://ui-avatars.com/api/?name=Admin&background=667eea&color=fff&size=200' },
+            { id: 'user1', password: 'user123', role: 'user', name: 'User One', email: 'user1@techvault.com', picture: 'https://ui-avatars.com/api/?name=User+One&background=667eea&color=fff&size=200' },
+            { id: 'user2', password: 'user456', role: 'user', name: 'User Two', email: 'user2@techvault.com', picture: 'https://ui-avatars.com/api/?name=User+Two&background=667eea&color=fff&size=200' }
+        ];
+
+        // Initialize data
+        let currentUser = JSON.parse(localStorage.getItem('currentUser')) || null;
+        let carts = JSON.parse(localStorage.getItem('carts')) || { admin: [], user1: [], user2: [] };
+        let products = JSON.parse(localStorage.getItem('products')) || [
+            { name: 'Premium Phone Case', price: 29.99, description: 'Ultra-slim design with military-grade protection.', icon: '📱' },
+            { name: 'Wireless Headphones', price: 89.99, description: 'High-quality audio with active noise cancellation.', icon: '🎧' },
+            { name: 'Fast Wireless Charger', price: 39.99, description: '15W fast wireless charging with LED indicator.', icon: '⚡' },
+            { name: 'Laptop Stand', price: 49.99, description: 'Ergonomic aluminum stand with adjustable height.', icon: '💻' },
+            { name: 'Gaming Mouse', price: 59.99, description: 'Precision gaming mouse with RGB lighting.', icon: '🖱️' },
+            { name: 'USB-C Hub', price: 69.99, description: '7-in-1 hub with 4K HDMI, USB 3.0, SD card reader.', icon: '🔌' }
+        ];
+
+        // Login function
+        function login(event) {
+            event.preventDefault();
+            const userId = document.getElementById('userId').value;
+            const password = document.getElementById('userPassword').value;
+            const user = users.find(u => u.id === userId && u.password === password);
+
+            if (user) {
+                currentUser = { ...user, isLoggedIn: true };
+                localStorage.setItem('currentUser', JSON.stringify(currentUser));
+                updateUserUI();
+                hideLoginModal();
+                showNotification(`Welcome back, ${currentUser.name}!`, 'success');
+            } else {
+                showNotification('Invalid ID or password.', 'error');
+            }
+        }
+
+        // Update User UI
+        function updateUserUI() {
+            const loginBtn = document.getElementById('loginBtn');
+            const userInfo = document.getElementById('userInfo');
+            const userAvatar = document.getElementById('userAvatar');
+            const userName = document.getElementById('userName');
+            const userEmail = document.getElementById('userEmail');
+            const adminLink = document.getElementById('adminLink');
+
+            if (currentUser && currentUser.isLoggedIn) {
+                loginBtn.classList.add('hidden');
+                userInfo.classList.remove('hidden');
+                userAvatar.src = currentUser.picture;
+                userName.textContent = currentUser.name;
+                userEmail.textContent = currentUser.email;
+                adminLink.classList.toggle('hidden', currentUser.role !== 'admin');
+            } else {
+                loginBtn.classList.remove('hidden');
+                userInfo.classList.add('hidden');
+                adminLink.classList.add('hidden');
+            }
+        }
+
+        // Logout
+        function logout() {
+            currentUser = null;
+            localStorage.removeItem('currentUser');
+            updateUserUI();
+            hideUserDropdown();
+            showNotification('You have been signed out.', 'info');
+        }
+
+        // Notification System
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            notification.className = `notification ${type}`;
+            notification.textContent = message;
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: ${type === 'success' ? '#27ae60' : type === 'error' ? '#e74c3c' : '#3498db'};
+                color: white;
+                padding: 1rem 1.5rem;
+                border-radius: 8px;
+                z-index: 3000;
+                animation: slideInRight 0.3s ease-out;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+                max-width: 300px;
+                word-wrap: break-word;
+            `;
+            document.body.appendChild(notification);
+            setTimeout(() => {
+                notification.style.animation = 'slideOutRight 0.3s ease-out';
+                setTimeout(() => document.body.removeChild(notification), 300);
+            }, 3000);
+        }
+
+        // Cart Functions
+        function addToCart(productName, price) {
+            if (!currentUser || !currentUser.isLoggedIn) {
+                showLoginModal();
+                return;
+            }
+            const button = event.target;
+            const originalText = button.textContent;
+            button.innerHTML = '<span class="loading"></span> Adding...';
+            button.disabled = true;
+
+            setTimeout(() => {
+                const userCart = carts[currentUser.id] || [];
+                const existingItem = userCart.find(item => item.name === productName);
+                if (existingItem) {
+                    existingItem.quantity += 1;
+                } else {
+                    userCart.push({ name: productName, price, quantity: 1, id: Date.now() });
+                }
+                carts[currentUser.id] = userCart;
+                localStorage.setItem('carts', JSON.stringify(carts));
+                updateCartCount();
+                button.textContent = '✓ Added!';
+                button.style.background = 'linear-gradient(45deg, #27ae60, #2ecc71)';
+                setTimeout(() => {
+                    button.textContent = originalText;
+                    button.style.background = 'linear-gradient(45deg, #667eea, #764ba2)';
+                    button.disabled = false;
+                }, 2000);
+                const cartIcon = document.querySelector('.cart-icon');
+                cartIcon.style.animation = 'bounce 0.5s ease';
+            }, 1000);
+        }
+
+        function updateCartCount() {
+            if (!currentUser) return;
+            const userCart = carts[currentUser.id] || [];
+            const cartCount = userCart.reduce((total, item) => total + item.quantity, 0);
+            document.getElementById('cartCount').textContent = cartCount;
+        }
+
+        function toggleCart() {
+            if (!currentUser || !currentUser.isLoggedIn) {
+                showLoginModal();
+                return;
+            }
+            showCartPage();
+        }
+
+        function showCartPage() {
+            document.querySelector('.hero').classList.add('hidden');
+            document.querySelector('.products').classList.add('hidden');
+            document.querySelector('.features').classList.add('hidden');
+            document.getElementById('cartPage').classList.remove('hidden');
+            document.getElementById('adminPage').classList.add('hidden');
+            renderCartItems();
+            window.scrollTo(0, 0);
+        }
+
+        function renderCartItems() {
+            if (!currentUser) return;
+            const cartItemsContainer = document.getElementById('cartItems');
+            const cartSummary = document.getElementById('cartSummary');
+            const userCart = carts[currentUser.id] || [];
+
+            if (userCart.length === 0) {
+                cartItemsContainer.innerHTML = `
+                    <div class="empty-cart">
+                        <div class="empty-cart-icon">🛒</div>
+                        <h3>Your cart is empty</h3>
+                        <p>Add some awesome products to get started!</p>
+                        <br>
+                        <a href="#" class="cta-button" onclick="showHomePage()">Continue Shopping</a>
+                    </div>
+                `;
+                cartSummary.classList.add('hidden');
+                return;
+            }
+
+            cartSummary.classList.remove('hidden');
+            let cartHTML = '';
+            userCart.forEach(item => {
+                cartHTML += `
+                    <div class="cart-item">
+                        <div class="cart-item-image" aria-label="${item.name}">
+                            ${products.find(p => p.name === item.name)?.icon || '📦'}
+                        </div>
+                        <div class="cart-item-details">
+                            <div class="cart-item-name">${item.name}</div>
+                            <div class="cart-item-price">$${item.price.toFixed(2)}</div>
+                        </div>
+                        <div class="cart-item-actions">
+                            <div class="quantity-controls">
+                                <button class="quantity-btn" onclick="decreaseQuantity(${item.id})" ${item.quantity <= 1 ? 'disabled' : ''} aria-label="Decrease quantity">-</button>
+                                <span class="quantity-display">${item.quantity}</span>
+                                <button class="quantity-btn" onclick="increaseQuantity(${item.id})" aria-label="Increase quantity">+</button>
+                            </div>
+                            <button class="remove-btn" onclick="removeFromCart(${item.id})" aria-label="Remove ${item.name} from cart">Remove</button>
+                        </div>
+                    </div>
+                `;
+            });
+            cartItemsContainer.innerHTML = cartHTML;
+            updateCartTotal();
+        }
+
+        function increaseQuantity(itemId) {
+            if (!currentUser) return;
+            const userCart = carts[currentUser.id] || [];
+            const item = userCart.find(item => item.id === itemId);
+            if (item) {
+                item.quantity += 1;
+                carts[currentUser.id] = userCart;
+                localStorage.setItem('carts', JSON.stringify(carts));
+                updateCartCount();
+                renderCartItems();
+            }
+        }
+
+        function decreaseQuantity(itemId) {
+            if (!currentUser) return;
+            const userCart = carts[currentUser.id] || [];
+            const item = userCart.find(item => item.id === itemId);
+            if (item && item.quantity > 1) {
+                item.quantity -= 1;
+                carts[currentUser.id] = userCart;
+                localStorage.setItem('carts', JSON.stringify(carts));
+                updateCartCount();
+                renderCartItems();
+            }
+        }
+
+        function removeFromCart(itemId) {
+            if (!currentUser) return;
+            const userCart = carts[currentUser.id] || [];
+            const itemIndex = userCart.findIndex(item => item.id === itemId);
+            if (itemIndex > -1) {
+                const cartItem = event.target.closest('.cart-item');
+                cartItem.style.animation = 'fadeOut 0.3s ease-out';
+                setTimeout(() => {
+                    userCart.splice(itemIndex, 1);
+                    carts[currentUser.id] = userCart;
+                    localStorage.setItem('carts', JSON.stringify(carts));
+                    updateCartCount();
+                    renderCartItems();
+                }, 300);
+            }
+        }
+
+        function updateCartTotal() {
+            if (!currentUser) return;
+            const userCart = carts[currentUser.id] || [];
+            const total = userCart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            document.getElementById('cartTotal').textContent = `Total: $${total.toFixed(2)}`;
+        }
+
+        function checkout() {
+            if (!currentUser) return;
+            const userCart = carts[currentUser.id] || [];
+            if (userCart.length === 0) {
+                showNotification('Your cart is empty!', 'error');
+                return;
+            }
+            const checkoutBtn = event.target;
+            const originalText = checkoutBtn.textContent;
+            checkoutBtn.innerHTML = '<span class="loading"></span> Processing...';
+            checkoutBtn.disabled = true;
+
+            setTimeout(() => {
+                showNotification(`Thank you, ${currentUser.name}! Your order has been processed.`, 'success');
+                carts[currentUser.id] = [];
+                localStorage.setItem('carts', JSON.stringify(carts));
+                updateCartCount();
+                renderCartItems();
+                checkoutBtn.textContent = originalText;
+                checkoutBtn.disabled = false;
+                setTimeout(() => showHomePage(), 2000);
+            }, 2000);
+        }
+
+        // Admin Functions
+        function showAdminPage() {
+            if (!currentUser || currentUser.role !== 'admin') {
+                showNotification('Access denied. Admin only.', 'error');
+                return;
+            }
+            document.querySelector('.hero').classList.add('hidden');
+            document.querySelector('.products').classList.add('hidden');
+            document.querySelector('.features').classList.add('hidden');
+            document.getElementById('cartPage').classList.add('hidden');
+            document.getElementById('adminPage').classList.remove('hidden');
+            renderAdminCarts();
+            window.scrollTo(0, 0);
+        }
+
+        function renderAdminCarts() {
+            const adminCartList = document.getElementById('adminCartList');
+            let cartHTML = '';
+            Object.keys(carts).forEach(userId => {
+                const userCart = carts[userId] || [];
+                if (userCart.length > 0) {
+                    cartHTML += `<h3>${userId}'s Cart</h3>`;
+                    userCart.forEach(item => {
+                        cartHTML += `
+                            <div class="admin-cart-item">
+                                <span>${item.name} (Qty: ${item.quantity}, Price: $${item.price.toFixed(2)})</span>
+                                <div>
+                                    <button class="quantity-btn" onclick="adminIncreaseQuantity('${userId}', ${item.id})">+</button>
+                                    <button class="quantity-btn" onclick="adminDecreaseQuantity('${userId}', ${item.id})" ${item.quantity <= 1 ? 'disabled' : ''}>-</button>
+                                    <button class="remove-btn" onclick="adminRemoveFromCart('${userId}', ${item.id})">Remove</button>
+                                </div>
+                            </div>
+                        `;
+                    });
+                }
+            });
+            adminCartList.innerHTML = cartHTML || '<p>No items in any cart.</p>';
+        }
+
+        function adminIncreaseQuantity(userId, itemId) {
+            const userCart = carts[userId] || [];
+            const item = userCart.find(item => item.id === itemId);
+            if (item) {
+                item.quantity += 1;
+                carts[userId] = userCart;
+                localStorage.setItem('carts', JSON.stringify(carts));
+                renderAdminCarts();
+                if (currentUser.id === userId) updateCartCount();
+            }
+        }
+
+        function adminDecreaseQuantity(userId, itemId) {
+            const userCart = carts[userId] || [];
+            const item = userCart.find(item => item.id === itemId);
+            if (item && item.quantity > 1) {
+                item.quantity -= 1;
+                carts[userId] = userCart;
+                localStorage.setItem('carts', JSON.stringify(carts));
+                renderAdminCarts();
+                if (currentUser.id === userId) updateCartCount();
+            }
+        }
+
+        function adminRemoveFromCart(userId, itemId) {
+            const userCart = carts[userId] || [];
+            const itemIndex = userCart.findIndex(item => item.id === itemId);
+            if (itemIndex > -1) {
+                userCart.splice(itemIndex, 1);
+                carts[userId] = userCart;
+                localStorage.setItem('carts', JSON.stringify(carts));
+                renderAdminCarts();
+                if (currentUser.id === userId) updateCartCount();
+            }
+        }
+
+        function addProduct(event) {
+            event.preventDefault();
+            if (!currentUser || currentUser.role !== 'admin') {
+                showNotification('Access denied. Admin only.', 'error');
+                return;
+            }
+            const name = document.getElementById('productName').value;
+            const price = parseFloat(document.getElementById('productPrice').value);
+            const description = document.getElementById('productDescription').value;
+            const icon = document.getElementById('productIcon').value;
+
+            if (!name || isNaN(price) || !description || !icon) {
+                showNotification('Please fill all fields correctly.', 'error');
+                return;
+            }
+
+            products.push({ name, price, description, icon });
+            localStorage.setItem('products', JSON.stringify(products));
+            renderProducts();
+            document.getElementById('productName').value = '';
+            document.getElementById('productPrice').value = '';
+            document.getElementById('productDescription').value = '';
+            document.getElementById('productIcon').value = '';
+            showNotification('Product added successfully!', 'success');
+        }
+
+        function renderProducts() {
+            const productGrid = document.getElementById('productGrid');
+            let productHTML = '';
+            products.forEach(product => {
+                productHTML += `
+                    <div class="product-card">
+                        <div class="product-image" aria-label="${product.name}">${product.icon}</div>
+                        <div class="product-info">
+                            <h3 class="product-title">${product.name}</h3>
+                            <div class="product-price">$${product.price.toFixed(2)}</div>
+                            <p class="product-description">${product.description}</p>
+                            <button class="add-to-cart" onclick="addToCart('${product.name}', ${product.price})" aria-label="Add ${product.name} to Cart">Add to Cart</button>
+                        </div>
+                    </div>
+                `;
+            });
+            productGrid.innerHTML = productHTML;
+            document.querySelectorAll('.product-card').forEach(card => observer.observe(card));
+        }
+
+        // Navigation and UI Functions
+        function showHomePage() {
+            document.querySelector('.hero').classList.remove('hidden');
+            document.querySelector('.products').classList.remove('hidden');
+            document.querySelector('.features').classList.remove('hidden');
+            document.getElementById('cartPage').classList.add('hidden');
+            document.getElementById('adminPage').classList.add('hidden');
+            window.scrollTo(0, 0);
+        }
+
+        function showLoginModal() {
+            document.getElementById('loginModal').classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function hideLoginModal() {
+            document.getElementById('loginModal').classList.add('hidden');
+            document.body.style.overflow = 'auto';
+        }
+
+        function toggleUserDropdown() {
+            document.getElementById('userDropdown').classList.toggle('hidden');
+        }
+
+        function hideUserDropdown() {
+            document.getElementById('userDropdown').classList.add('hidden');
+        }
+
+        function showProfile() {
+            hideUserDropdown();
+            showNotification('Profile page coming soon!', 'info');
+        }
+
+        function showOrders() {
+            hideUserDropdown();
+            showNotification('Order history coming soon!', 'info');
+        }
+
+        function toggleMenu() {
+            document.getElementById('navLinks').classList.toggle('active');
+        }
+
+        // Event Listeners
+        document.addEventListener('DOMContentLoaded', () => {
+            updateUserUI();
+            updateCartCount();
+            renderCartItems();
+            renderProducts();
+        });
+
+        document.addEventListener('click', (e) => {
+            const userMenu = document.getElementById('userMenu');
+            const userDropdown = document.getElementById('userDropdown');
+            const loginModal = document.getElementById('loginModal');
+            const loginContent = document.querySelector('.login-content');
+
+            if (!userMenu.contains(e.target) && !userDropdown.classList.contains('hidden')) {
+                hideUserDropdown();
+            }
+            if (loginModal && e.target === loginModal && !loginContent.contains(e.target)) {
+                hideLoginModal();
+            }
+        });
+
+        // Smooth Scrolling
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+
+        // Header Scroll Effect
+        window.addEventListener('scroll', () => {
+            const header = document.querySelector('header');
+            header.style.background = window.scrollY > 100 ? 'rgba(255, 255, 255, 0.98)' : 'rgba(255, 255, 255, 0.95)';
+        });
+
+        // Animations
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes bounce {
+                0%, 20%, 60%, 100% { transform: translateY(0); }
+                40% { transform: translateY(-10px); }
+                80% { transform: translateY(-5px); }
+            }
+            @keyframes fadeOut {
+                from { opacity: 1; transform: translateX(0); }
+                to { opacity: 0; transform: translateX(-100%); }
+            }
+            @keyframes slideInRight {
+                from { transform: translateX(100%); opacity: 0; }
+                to { transform: translateX(0); opacity: 1; }
+            }
+            @keyframes slideOutRight {
+                from { transform: translateX(0); opacity: 1; }
+                to { transform: translateX(100%); opacity: 0; }
+            }
+        `;
+        document.head.appendChild(style);
+
+        // Intersection Observer
+        const observerOptions = { threshold: 0.1, rootMargin: '0px 0px -50px 0px' };
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.animation = 'fadeInUp 0.8s ease-out';
+                }
+            });
+        }, observerOptions);
+        document.querySelectorAll('.product-card').forEach(card => observer.observe(card));
+    </script>
+</body>
+</html>

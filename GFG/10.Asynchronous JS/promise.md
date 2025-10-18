@@ -1,0 +1,435 @@
+## 🔸 Promise
+
+- ##### A `Promise` in JavaScript is like a guarantee that something will happen `in the future` — either `successfully` or `unsuccessfully`.
+
+- ##### JavaScript Promises make handling asynchronous operations like API calls, file loading, or time delays easier.
+
+- ##### Think of a Promise as a placeholder for a value that will be available in the future.
+
+- ##### It can be in one of these three states:
+
+  - ##### `Pending`: The task is in the initial state( The task hasn’t finished yet.).
+
+  - ##### `Fulfilled`: The task was completed successfully, and the result is available.
+
+  - ##### `Rejected`: The task failed, and an error is provided.
+
+---
+
+## Promise syntax
+
+```js
+let promise = new Promise(function (resolve, reject) {
+  // (resolve, reject) -> These two parameters are predefined by JavaScript engine.
+  // You can change their names, but the first is always for success, the second for error.
+
+  // Simulate some task (e.g., data fetching, calculations, etc.)
+  let taskDone = true; // Change this to false to test rejection
+
+  if (taskDone) {
+    resolve(" Task completed successfully!"); // If everything goes well
+  } else {
+    reject(" Task failed!"); // If something goes wrong
+  }
+});
+
+// Consuming the promise
+promise
+  .then(function (result) {
+    // This block runs when the promise is resolved successfully
+    console.log("Success:", result);
+  })
+  .catch(function (error) {
+    // This block runs when the promise is rejected (error happens)
+    console.log("Error:", error);
+  });
+```
+
+---
+
+# Promise syntax with example
+
+- In this example you will learn about all the methods to use promise.
+
+```js
+// Step 1: Creating the Promise
+let p = new Promise((resolve, reject) => {
+  let taskDone = true; // you can change to false to test rejection
+
+  if (taskDone) {
+    resolve("✅ Task completed successfully"); // Success
+  } else {
+    reject("❌ Task failed"); // Failure
+  }
+});
+
+// Step 2: Consuming the Promise (various ways)
+
+// 🔹 Method 1: then() with both success and error callbacks
+p.then(
+  (value) => {
+    // Success callback
+    console.log("Success:", value);
+  },
+  (error) => {
+    // Error callback
+    console.log("Error:", error);
+  }
+  //p.then() takes two arguments, a callback for success and another for failure.
+);
+
+// 🔹 Method 2: then().catch()
+p.then((value) => {
+  console.log("Success:", value);
+}).catch((error) => {
+  console.log("Error:", error);
+});
+// Here .then(callback) is for success and .catch(callback) is for failure.
+
+// 🔹 Method 3: then().finally()
+p.then((value) => {
+  console.log("Success:", value);
+}).finally(() => {
+  console.log("This runs no matter what (finally)");
+});
+
+// 🔹 Method 4: then().catch().finally()
+p.then((value) => {
+  console.log("Success:", value);
+})
+  .catch((error) => {
+    console.log("Error:", error);
+  })
+  .finally(() => {
+    console.log("Always runs (finally)");
+  });
+```
+
+#### 🔍 Summary of What Each Does:
+
+| Method                      | Description                                             |
+| --------------------------- | ------------------------------------------------------- |
+| `.then(success, error)`     | Handles both success & error in one call (less common)  |
+| `.then().catch()`           | Handles success and catches errors separately (cleaner) |
+| `.finally()`                | Runs after .then() or .catch(), no matter the result    |
+| `.then().catch().finally()` | Best practice for readability & control                 |
+
+---
+
+### Role of `then` & `catch` in promise handling
+
+- ##### The consuming code can receive the final result of a promise through `.then()` and `.catch()`
+
+- # `.then()`
+- ##### The most fundamental is `.then()`
+
+```js
+//myPromise.then() takes two arguments, a callback for success and another for failure.
+myPromise.then(
+  (result) => {
+    /*code if succesful*/
+  },
+  (error) => {
+    /*code if error*/
+  }
+);
+```
+
+- ##### If we handle promise only for succesful completions then we provide only one callback to `.then()`
+
+```js
+let p = new Promise((resolve, reject) => {
+  setTimeout(() => {
+    resolve("Done");
+  }, 1000);
+});
+
+p.then((result) => {
+  console.log(result);
+});
+```
+
+- ##### If we handle promise only for errors in promise the we can give `null` to first callback and give a proper callback for errors in Promise.
+- ##### If we handle `promise` only for `errors in promise` then we can give `null` to first callback and give a proper callback for errors in Promise for second callback.
+
+```js
+let promise1 = new Promise((resolve, reject) => {
+  setTimeout(() => {
+    reject("Promise 1 rejected");
+  }, 2000);
+});
+
+promise1.then(null, (error) => {
+  console.log("Error Caught in Promise 1: ", error);
+});
+```
+
+- # `.catch()`
+- ##### We can use `.then()` for success in Promise and `.catch()` for errors in Promise.
+
+```js
+// Creating a Promise that will reject after 1 second
+let promise1 = new Promise((resolve, reject) => {
+  setTimeout(() => {
+    reject("rejection done"); // This triggers the rejection
+  }, 1000);
+});
+
+// Handling error inside .then(null, errorFn)
+promise1.then(
+  null, // no success handler
+  (error) => {
+    console.log("Error: ", error); // This will log the error
+  }
+); // ✅ This works, but it's less clean than using .catch().
+
+// Using .catch() directly
+promise1.catch((error) => {
+  console.log("Error: ", error); // Cleaner way to catch errors
+});
+
+// Chaining .then() and .catch()
+promise1
+  .then() // no success handler
+  .catch((error) => {
+    console.log("Error: ", error); // Will catch any error from above
+  });
+```
+
+---
+
+---
+
+### ✅ First, let's understand the roles:
+
+- ##### .`then()` is used to handle successful resolution.
+
+- ##### `.catch()` is used to handle rejections (errors).
+
+- ##### You can also pass two functions to `.then(success, error)`, but using `.catch()` is cleaner and preferred.
+
+---
+
+---
+
+## Practical Examples
+
+### Example 1
+
+```javascript
+const isRequestSuccessful = true;
+
+const db = [
+  {
+    id: 1,
+    name: "Abhishek",
+  },
+  {
+    id: 2,
+    name: "Radhe Bhaiya",
+  },
+];
+
+// Create a promise that simulates fetching data from a database
+let promise = new Promise((resolve, reject) => {
+  if (isRequestSuccessful) {
+    // Simulate database query delay (3 seconds)
+    setTimeout(() => {
+      resolve(db); // Return the database array
+    }, 3000);
+  } else {
+    const error = new Error("Something went wrong");
+    reject(error.message);
+  }
+});
+
+promise
+  .then((result) => {
+    // After 3 seconds, this runs and logs the database
+    console.log(result);
+    // Output: [ { id: 1, name: "Abhishek" }, { id: 2, name: "Radhe Bhaiya" } ]
+  })
+  .catch((error) => {
+    // This runs only if isRequestSuccessful is false
+    console.log(error);
+  });
+```
+
+### Example 2: Using Fetch API (Actual HTTP Request)
+
+```javascript
+// Fetch API returns a promise automatically
+fetch("https://jsonplaceholder.typicode.com/posts/1")
+  .then((response) => response.json()) // Parse response to JSON
+  .then((data) => {
+    console.log("Post title:", data.title);
+    // Output: "sunt aut facere repellat provident occaecati excepturi optio reprehenderit"
+  })
+  .catch((error) => {
+    console.log("Fetch error:", error);
+  });
+```
+
+### Example 3: Simulating API Call with setTimeout
+
+```javascript
+function fakeAPI() {
+  return new Promise((resolve, reject) => {
+    // Simulate 2 seconds network delay
+    setTimeout(() => {
+      const success = true; // Simulating a successful API call
+      // Uncomment the line below to simulate a failure
+      // const success = false;
+
+      if (success) {
+        resolve("Data fetched from server!");
+      } else {
+        reject("Failed to fetch data.");
+      }
+    }, 2000);
+  });
+}
+
+fakeAPI()
+  .then((data) => {
+    console.log("✅", data);
+    // Output after 2 seconds: "✅ Data fetched from server!"
+  })
+  .catch((error) => {
+    console.log("❌", error);
+  });
+```
+
+### Example 4: Promise Chaining
+
+```javascript
+let url = "https://jsonplaceholder.typicode.com/posts/1";
+
+let promise = fetch(url);
+
+promise
+  .then((response) => {
+    // First .then() - receive the response
+    console.log("Response received");
+    // response.json() also returns a promise, so we return it
+    return response.json();
+  })
+  .then((data) => {
+    // Second .then() - receive the parsed data
+    console.log("Parsed data:", data);
+    // You can chain multiple .then() blocks
+  })
+  .catch((error) => {
+    // This catches errors from any .then() in the chain
+    console.log("Error Occurred:", error);
+  });
+
+// Key Point: When you return something from a .then() block,
+// it returns a new promise which you can chain with another .then()
+```
+
+---
+
+### Example 5
+
+```js
+let url = "https://jsonplaceholder.typicode.com/posts/1";
+
+let promise = fetch(url); // fetch API returns a promise object
+console.log(promise);
+
+// output:
+// Promise { <pending> }
+// [[Prototype]]: Promise
+// [[PromiseState]]: "fulfilled"
+// [[PromiseResult]]: Response
+
+// if we see the output, initially the promise is
+// in pending state but below we can see that
+// the promise is in fulfilled state
+// this is because fetch is very fast and it
+// gets the response quickly
+// initially it was in pending state but by the time we
+// logged it to the console, it got the response and changed
+// its state to fulfilled
+```
+
+---
+
+### Example 6
+
+```js
+let url = "https://jsonplaceholder.typicode.com/posts/1";
+
+let promise = fetch(url);
+
+promise
+  .then((response) => {
+    return response.json();
+    // whenever we return something from .then() block, it 
+    // again returns a promise object which we can chain 
+    // with another .then() block
+  })
+  .then((data) => {
+    console.log(data);
+  })
+  .catch((error) => {
+    console.log("Error Occured");
+  });
+```
+
+---
+
+## Modern Approach: async/await (Built on Promises)
+
+Async/await is a cleaner, more modern way to write promise-based code. It makes asynchronous code look synchronous:
+
+```javascript
+async function getPost() {
+  try {
+    // await pauses execution until the promise resolves
+    const response = await fetch(
+      "https://jsonplaceholder.typicode.com/posts/1"
+    );
+    const data = await response.json();
+    console.log("Post:", data.title);
+    // Output: "Post: sunt aut facere repellat provident occaecati excepturi optio reprehenderit"
+  } catch (error) {
+    // catch block handles any errors in the try block
+    console.log("Error:", error);
+  }
+}
+
+getPost(); // Call the async function
+
+// Note: async/await is just syntactic sugar over promises
+// Behind the scenes, it's still using promises!
+```
+
+---
+
+## Benefits of Promises vs Callbacks
+
+### With Callbacks (Callback Hell - Hard to Read)
+
+```javascript
+fetchData(url, (data) => {
+  processData(data, (result) => {
+    saveData(result, (response) => {
+      console.log(response); // Deeply nested - hard to follow
+    });
+  });
+});
+```
+
+### With Promises (Clean Chain - Easy to Read)
+
+```javascript
+fetchData(url)
+  .then((data) => processData(data))
+  .then((result) => saveData(result))
+  .then((response) => console.log(response)) // Linear and readable
+  .catch((error) => console.log(error)); // Single error handler
+```
+
+---

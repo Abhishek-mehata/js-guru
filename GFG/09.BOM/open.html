@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>BOM Info & Timer</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      background-color: #f2f2f2;
+      padding: 20px;
+    }
+    .card {
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      margin-bottom: 15px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+    button {
+      padding: 10px 20px;
+      margin-right: 10px;
+      background: #007bff;
+      color: white;
+      border: none;
+      border-radius: 5px;
+    }
+    .btn{
+        cursor: pointer;
+    }
+    .btn:hover{
+        background: #0056b3;
+        transition: background 0.3s;
+    }
+  </style>
+</head>
+<body>
+
+  <h2>🌐 Browser Info & Timer</h2>
+
+  <div class="card">
+    <h3>📍 URL Info:</h3>
+    <p><strong>Full URL:</strong> <span id="url"></span></p>
+    <p><strong>Protocol:</strong> <span id="protocol"></span></p>
+    <p><strong>Host:</strong> <span id="host"></span></p>
+    <button onclick="reloadPage()" class="btn">🔄 Reload Page</button>
+  </div>
+
+  <div class="card">
+    <h3>🧭 Browser Info:</h3>
+    <p><strong>Browser:</strong> <span id="browser"></span></p>
+    <p><strong>Language:</strong> <span id="language"></span></p>
+    <p><strong>Online Status:</strong> <span id="online"></span></p>
+  </div>
+
+  <div class="card">
+    <h3>🖥️ Screen Info:</h3>
+    <p><strong>Width:</strong> <span id="width"></span>px</p>
+    <p><strong>Height:</strong> <span id="height"></span>px</p>
+  </div>
+
+  <div class="card">
+    <h3>⏲️ Live Timer:</h3>
+    <p>Time passed: <span id="timer">0</span> seconds</p>
+  </div>
+
+  <button onclick="redirect()" class="btn">🌍 Go to Google</button>
+
+  <script>
+    // Set URL Info
+    document.getElementById("url").textContent = location.href;
+    document.getElementById("protocol").textContent = location.protocol;
+    document.getElementById("host").textContent = location.host;
+
+    // Reload function
+    function reloadPage() {
+      location.reload();
+    }
+
+    // Set Browser Info
+    document.getElementById("browser").textContent = navigator.userAgent;
+    document.getElementById("language").textContent = navigator.language;
+    document.getElementById("online").textContent = navigator.onLine ? "Online" : "Offline";
+
+    // Set Screen Info
+    document.getElementById("width").textContent = screen.width;
+    document.getElementById("height").textContent = screen.height;
+
+    // Timer
+    let count = 0;
+    setInterval(() => {
+      count++;
+      document.getElementById("timer").textContent = count;
+    }, 1000);
+
+    // Redirect
+    function redirect() {
+      location.href = "https://www.google.com";
+    }
+  </script>
+
+</body>
+</html>
