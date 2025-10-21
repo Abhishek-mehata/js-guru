@@ -1,51 +1,12 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="UTF-8" />
-    <title>Crypto Tracker (Proxy Fix)</title>
-  </head>
-  <body>
-    <h2>Bitcoin Price</h2>
-    <div id="price">Loading...</div>
-
-    <script>
-      const apiURL =
-        "https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum&vs_currencies=usd";
-      const proxy =
-        "https://api.allorigins.win/get?url=" + encodeURIComponent(apiURL);
-
-      async function loadPrices() {
-        try {
-          const res = await fetch(proxy);
-          const result = await res.json();
-          const data = JSON.parse(result.contents);
-
-          document.getElementById("price").innerHTML = `
-          Bitcoin: $${data.bitcoin.usd.toLocaleString()}<br>
-          Ethereum: $${data.ethereum.usd.toLocaleString()}
-        `;
-        } catch (err) {
-          document.getElementById("price").textContent = "Cannot fetch data 😢";
-          console.error(err);
-        }
-      }
-
-      loadPrices();
-      setInterval(loadPrices, 30000); // Refresh every 30 seconds
-    </script>
-  </body>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  
+  <script defer src="index.js"></script>
+</body>
 </html>
-
-
-<!--  -->
-
-
-<!-- 
-fe98d22c-8760-4594-b4f8-d99be5011379 api key
-
-https://pro.coinmarketcap.com/account/
-
-https://coinmarketcap.com/api/documentation/v1/#operation/getV1CryptocurrencyListingsHistorical
-
-
--->
